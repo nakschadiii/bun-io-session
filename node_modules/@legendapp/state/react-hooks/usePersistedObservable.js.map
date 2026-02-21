@@ -1,0 +1,1 @@
+{"version":3,"file":"usePersistedObservable.js","sources":["../../../../src/react-hooks/usePersistedObservable.ts"],"sourcesContent":[null],"names":["useMemo","persistObservable"],"mappings":";;;;;AAKA;;;;;;;AAOG;AACa,SAAA,sBAAsB,CAClC,YAAgD,EAChD,OAA0B,EAAA;;IAG1B,OAAOA,aAAO,CAAC,MAAK;AAChB,QAAA,OAAOC,yBAAiB,CAAI,YAAY,EAAE,OAAO,CAAC,CAAC;KACtD,EAAE,EAAE,CAAC,CAAC;AACX;;;;"}
