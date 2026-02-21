@@ -44,6 +44,7 @@ export default function createClientIdentityService(props: ClientIdentityService
 
         async function validateClientIdJWT(token: string) {
             try {
+                if (!token) throw new Error("Missing token.");
                 const { payload } = await jwtVerify(token, JWT_SECRET);
                 return payload?.client?.id as string;
             } catch (e) {
