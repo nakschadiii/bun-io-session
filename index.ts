@@ -221,6 +221,14 @@ export default function createClientIdentityService(props: ClientIdentityService
                 }
             }, { initial: true, immediate: true });
 
+            socket.session.get = function () {
+                return {
+                    client: socket?.session?.client,
+                    users: socket?.session?.users?.get(),
+                    user: socket?.session?.currentUser?.get()
+                }
+            }
+
             socket.session.refresh(function () {
                 next();
             });
