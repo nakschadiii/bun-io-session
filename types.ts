@@ -34,5 +34,6 @@ export interface ClientIdentityServiceProps {
         };
     }) => void;
     engine: any;
+    visitorTokenParamName?: string;
 }
 

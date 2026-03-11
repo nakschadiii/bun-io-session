@@ -17,6 +17,7 @@ export default function createClientIdentityService(props: ClientIdentityService
             getSessions,
             onUsersChange,
             engine,
+            visitorTokenParamName = "visitor_token",
         } = props;
 
         if (!clientIdCookieName) throw new Error("clientIdCookieName not set in environment variables.");
@@ -65,7 +66,7 @@ export default function createClientIdentityService(props: ClientIdentityService
                 logger("INFO", "validating client");
 
                 const url = new URL(req.url);
-                const visitorToken = url.searchParams.get("visitorToken");
+                const visitorToken = url.searchParams.get(visitorTokenParamName);
                 const visitorId = await validateClientIdJWT(visitorToken!);
                 let cookies: cookie.Cookies = cookie.parse(req.headers.get("cookie") || "");
                 let cookieName: string | undefined = findCryptedCookieName(cookies, clientIdCookieName!);
@@ -145,7 +146,7 @@ export default function createClientIdentityService(props: ClientIdentityService
 
             if (jwt) socket.session.client = await validateClientIdJWT(jwt!);
             else {
-                const visitorId = await validateClientIdJWT(socket?.handshake?.query?.visitorToken! as string);
+                const visitorId = await validateClientIdJWT(socket?.handshake?.query?.[visitorTokenParamName]! as string);
                 if (visitorId) socket.session.client = await checkRegisteration(undefined, visitorId as string);
                 else return next(new Error("Visitor token invalid."));
             }
@@ -222,10 +223,11 @@ export default function createClientIdentityService(props: ClientIdentityService
             }, { initial: true, immediate: true });
 
             socket.session.get = function () {
+                const currentUser = socket?.session?.currentUser?.get();
                 return {
                     client: socket?.session?.client,
                     users: socket?.session?.users?.get(),
-                    user: socket?.session?.currentUser?.get()
+                    user: typeof currentUser === "string" ? currentUser : null
                 }
             }
 
